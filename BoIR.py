@@ -8,13 +8,13 @@ import time
 
 
 #Adress
-BASEADRESS = 0xDA0000
+#BASEADRESS = 0xDA0000
 OFF0 = 0x2246B4
-OFF1 = 0x3DC
-OFF2 = 0x38
+OFF1 = 0x114
+OFF2 = 0x740
 OFF3 = 0x7B0
-OFF4 = 0x740
-OFF5 = 0x114
+OFF4 = 0x38
+OFF5 = 0x3DC
 
 
 #Init kernel32
@@ -44,10 +44,7 @@ def wczytaj(baseadres,off):
     newadr = baseadres + off
     wynik = ''
     for i in range(3,-1,-1):
-        try:
-            tmp = hex(ord(gra.read((newadr+i),1)))[2:4]
-        except:
-           print 'koczkodan'
+        tmp = hex(ord(gra.read((newadr+i),1)))[2:4]
         if len(tmp) == 1:
             tmp = '0'+tmp
         wynik += tmp
@@ -61,18 +58,20 @@ def wczytajwartosc(base,off):
 
 def init_gry():
     global gra
+    global BASEADRESS
     print "Podaj nr. procesu gry:"
     try:
         pid = int(raw_input("PID >"))
         gra = Process(pid)
+        BASEADRESS = int(raw_input("BASEADRESS >"),16)
     except:
         print "Blad otwarcia procesu!"
 
 
 def start():
     while True:
-        #TODO Shortcut to working programme....
-        print ord(gra.read(0x140CFEDC,1))
+        #TODO SEND DATA TO ARDUINO
+        print wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5))
         time.sleep(1)
 
 
