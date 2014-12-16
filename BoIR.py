@@ -10,12 +10,12 @@ import time
 #Adress
 BASEADRESS = 0x61D30000
 OFF0 = 0x67FF44
-OFF1 = 0x17C
-OFF2 = 0x18
-OFF3 = 0x1E0
-OFF4 = 0x1D4
-OFF5 = 0x568
-#koczkodanfedrfsdfsdfs
+OFF1 = 0x3DC
+OFF2 = 0x78C
+OFF3 = 0x170
+OFF4 = 0xA0
+OFF5 = 0x2BC
+
 
 #Init kernel32
 kernel = ctypes.windll.kernel32
@@ -45,7 +45,6 @@ def wczytaj(baseadres,off):
     wynik = ''
     for i in range(3,-1,-1):
         tmp = hex(ord(gra.read((newadr+i),1)))[2:4]
-
         if len(tmp) == 1:
             tmp = '0'+tmp
         wynik += tmp
@@ -55,7 +54,6 @@ def wczytajwartosc(base,off):
     for ofsety in off:
         base = wczytaj(base,ofsety)
     return base
-
 
 
 def init_gry():
@@ -68,11 +66,10 @@ def init_gry():
         print "Blad otwarcia procesu!"
 
 
-
 def start():
     while True:
         print wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5))
-        time.sleep(0.01)
+        time.sleep(1)
 
 
 init_gry()
