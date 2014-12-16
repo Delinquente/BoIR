@@ -8,13 +8,13 @@ import time
 
 
 #Adress
-BASEADRESS = 0x61D30000
-OFF0 = 0x67FF44
+BASEADRESS = 0xDA0000
+OFF0 = 0x2246B4
 OFF1 = 0x3DC
-OFF2 = 0x78C
-OFF3 = 0x170
-OFF4 = 0xA0
-OFF5 = 0x2BC
+OFF2 = 0x38
+OFF3 = 0x7B0
+OFF4 = 0x740
+OFF5 = 0x114
 
 
 #Init kernel32
@@ -44,7 +44,10 @@ def wczytaj(baseadres,off):
     newadr = baseadres + off
     wynik = ''
     for i in range(3,-1,-1):
-        tmp = hex(ord(gra.read((newadr+i),1)))[2:4]
+        try:
+            tmp = hex(ord(gra.read((newadr+i),1)))[2:4]
+        except:
+           print 'koczkodan'
         if len(tmp) == 1:
             tmp = '0'+tmp
         wynik += tmp
@@ -68,7 +71,8 @@ def init_gry():
 
 def start():
     while True:
-        print wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5))
+        #TODO Shortcut to working programme....
+        print ord(gra.read(0x140CFEDC,1))
         time.sleep(1)
 
 
