@@ -56,6 +56,21 @@ def wczytajwartosc(base,off):
     return base
 
 
+def init_arduino():
+    global arduino
+    print ""
+    print "-------------------------------"
+    print "-ARDUINO-PC FOR GAMES BETA 0.9-"
+    print "-------------------------------"
+    print ""
+    arduino = serial.Serial('COM3', 9600)
+    print "Port na pewno otworzony?",
+    print arduino.isOpen()
+    time.sleep(2)
+    print ""
+    print arduino.readline()
+
+
 def init_gry():
     global gra
     global BASEADRESS
@@ -71,10 +86,29 @@ def init_gry():
 def start():
     while True:
         #TODO SEND DATA TO ARDUINO
-        print wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5))
+        bombs=28
+        templife=8
+        keys=20
+        gold=32
+        energy=376
+        moc=158
+        arduino.write(
+        'H:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5))) + ' '
+        'B:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+bombs))) + ' '
+        'T:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+templife))) + ' '
+        'K:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+keys))) + ' '
+        'G:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+gold))) + ' '
+        )
+        #print 'BOMBS: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+bombs)))
+        #print 'Temporart Life: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+templife)))
+        #print 'Keys: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+keys)))
+        #print 'Gold: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+gold)))
+        #print 'Energy: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+energy)))
+        #print 'Moc: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+moc)))
+
         time.sleep(1)
 
-
+init_arduino()
 init_gry()
 start()
 gra.close()
