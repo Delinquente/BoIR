@@ -16,7 +16,7 @@ OFF3 = 0x1E0
 OFF4 = 0x1D4
 OFF5 = 0x568
 #koczkodanfedrfsdfsdfs
-#nowe zabawne funkcje
+
 #Init kernel32
 kernel = ctypes.windll.kernel32
 
