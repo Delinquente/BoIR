@@ -1,14 +1,11 @@
 __author__ = 'Delinquente'
 
-#Import libraries
-
 import ctypes
 import serial
 import time
 
 
-#Adress
-#BASEADRESS = 0xDA0000
+#Offsets of pointer
 OFF0 = 0x2246B4
 OFF1 = 0x114
 OFF2 = 0x740
@@ -20,7 +17,7 @@ OFF5 = 0x3DC
 #Init kernel32
 kernel = ctypes.windll.kernel32
 
-#clasa procesu
+#Class for opening program memory
 class Process(object):
 
     def __init__(self, pid):
@@ -38,7 +35,7 @@ class Process(object):
         kernel.ReadProcessMemory(self.h, addr, buf,ctypes.c_size_t(size),ctypes.addressof(bytesread))
         return buf[:bytesread.value]
 
-
+#Function of reading part of memory using pointers
 def wczytaj(baseadres,off):
     global newadr
     newadr = baseadres + off
@@ -50,12 +47,13 @@ def wczytaj(baseadres,off):
         wynik += tmp
     return int(wynik,16)
 
+#Function of reading part of memory
 def wczytajwartosc(base,off):
     for ofsety in off:
         base = wczytaj(base,ofsety)
     return base
 
-
+#Initiating arduino
 def init_arduino():
     global arduino
     print ""
@@ -70,7 +68,7 @@ def init_arduino():
     print ""
     print arduino.readline()
 
-
+#User input of PID and Baseaddress
 def init_gry():
     global gra
     global BASEADRESS
@@ -85,20 +83,23 @@ def init_gry():
 
 def start():
     while True:
-        #TODO SEND DATA TO ARDUINO
+        #Offsets of each parameter in memory
+        health=0
         bombs=28
         templife=8
         keys=20
         gold=32
         energy=376
         moc=158
+        #H: <health value> B: <bombs> T: <temporary lifes>
         arduino.write(
-        'H:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5))) + ' '
+        'H:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+health))) + ' '
         'B:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+bombs))) + ' '
         'T:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+templife))) + ' '
         'K:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+keys))) + ' '
         'G:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+gold))) + ' '
         )
+        #Debug output
         #print 'BOMBS: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+bombs)))
         #print 'Temporart Life: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+templife)))
         #print 'Keys: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+keys)))
