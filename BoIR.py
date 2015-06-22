@@ -6,6 +6,8 @@ import time
 
 
 #Offsets of pointer
+#Found using cheatengine
+#They can change after patches/new versions
 OFF0 = 0x2246B4
 OFF1 = 0x114
 OFF2 = 0x740
@@ -13,9 +15,9 @@ OFF3 = 0x7B0
 OFF4 = 0x38
 OFF5 = 0x3DC
 
-
-#Init kernel32
+debug_output = 0
 kernel = ctypes.windll.kernel32
+
 
 #Class for opening program memory
 class Process(object):
@@ -62,7 +64,7 @@ def init_arduino():
     print "--------------------------------------"
     print ""
     arduino = serial.Serial('COM3', 9600)
-    print "Port na pewno otworzony?",
+    print "Is port open?",
     print arduino.isOpen()
     time.sleep(2)
     print ""
@@ -72,13 +74,14 @@ def init_arduino():
 def init_gry():
     global gra
     global BASEADRESS
-    print "Podaj nr. procesu gry:"
+    print "Whats the BoIR.exe PID:"
     try:
         pid = int(raw_input("PID >"))
         gra = Process(pid)
+        print "The base address:"
         BASEADRESS = int(raw_input("BASEADRESS >"),16)
     except:
-        print "Blad otwarcia procesu!"
+        print "Error opening process"
 
 
 def start():
@@ -91,7 +94,9 @@ def start():
         gold=32
         energy=376
         moc=158
-        #H: <health value> B: <bombs> T: <temporary lifes>
+        
+        #Format of string
+        #H: <health value> B: <bombs> T: <temporary lifes> .....
         arduino.write(
         'H:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+health))) + ' '
         'B:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+bombs))) + ' '
@@ -99,13 +104,15 @@ def start():
         'K:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+keys))) + ' '
         'G:' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+gold))) + ' '
         )
+        
         #Debug output
-        #print 'BOMBS: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+bombs)))
-        #print 'Temporart Life: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+templife)))
-        #print 'Keys: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+keys)))
-        #print 'Gold: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+gold)))
-        #print 'Energy: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+energy)))
-        #print 'Moc: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+moc)))
+        if debug_output = 1:
+                    print 'BOMBS: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+bombs)))
+                    print 'Temporart Life: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+templife)))
+                    print 'Keys: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+keys)))
+                    print 'Gold: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+gold)))
+                    print 'Energy: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+energy)))
+                    print 'Moc: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+moc)))
 
         time.sleep(1)
 
