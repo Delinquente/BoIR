@@ -57,9 +57,9 @@ def wczytajwartosc(base,off):
 def init_arduino():
     global arduino
     print ""
-    print "-------------------------------"
-    print "-ARDUINO-PC FOR GAMES BETA 0.9-"
-    print "-------------------------------"
+    print "--------------------------------------"
+    print "-ARDUINO-PC FOR GAMES BETA 0.9.5 OMG -"
+    print "--------------------------------------"
     print ""
     arduino = serial.Serial('COM3', 9600)
     print "Port na pewno otworzony?",
