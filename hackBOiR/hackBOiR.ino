@@ -1,4 +1,3 @@
-
 #include <LiquidCrystal.h>
 String msg = "  ";
 char character;
@@ -14,11 +13,11 @@ void setup() {
 }
 
 void loop() {
-      while (Serial.available()>0){   
-        character=Serial.read();
-        msg.concat(character);
-       delay(10);   
-    }
+  while (Serial.available()>0){   
+    character=Serial.read();
+    msg.concat(character);
+    delay(10);   
+  }
     
   lcd.setCursor(0, 0);
   //Serial.println(msg);
