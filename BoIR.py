@@ -34,7 +34,7 @@ class Process(object):
     def read(self, addr, size):
         buf = ctypes.create_string_buffer(size)
         bytesread = ctypes.c_size_t()
-        kernel.ReadProcessMemory(self.h, addr, buf,ctypes.c_size_t(size),ctypes.addressof(bytesread))
+        kernel.ReadProcessMemory(self.h, addr, buf, ctypes.c_size_t(size), ctypes.addressof(bytesread))
         return buf[:bytesread.value]
 
 #Function of reading part of memory using pointers
@@ -42,17 +42,17 @@ def wczytaj(baseadres,off):
     global newadr
     newadr = baseadres + off
     wynik = ''
-    for i in range(3,-1,-1):
-        tmp = hex(ord(gra.read((newadr+i),1)))[2:4]
+    for i in range(3, -1, -1):
+        tmp = hex(ord(gra.read((newadr + i), 1)))[2:4]
         if len(tmp) == 1:
-            tmp = '0'+tmp
+            tmp = '0' + tmp
         wynik += tmp
-    return int(wynik,16)
+    return int(wynik, 16)
 
 #Function of reading part of memory
-def wczytajwartosc(base,off):
+def wczytajwartosc(base, off):
     for ofsety in off:
-        base = wczytaj(base,ofsety)
+        base = wczytaj(base, ofsety)
     return base
 
 #Initiating arduino
@@ -79,7 +79,7 @@ def init_gry():
         pid = int(raw_input("PID >"))
         gra = Process(pid)
         print "The base address:"
-        BASEADRESS = int(raw_input("BASEADRESS >"),16)
+        BASEADRESS = int(raw_input("BASEADRESS >"), 16)
     except:
         print "Error opening process"
 
@@ -87,13 +87,13 @@ def init_gry():
 def start():
     while True:
         #Offsets of each parameter in memory
-        health=0
-        bombs=28
-        templife=8
-        keys=20
-        gold=32
-        energy=376
-        moc=158
+        health = 0
+        bombs = 28
+        templife = 8
+        keys = 20
+        gold = 32
+        energy = 376
+        moc = 158
         
         #Format of string
         #H: <health value> B: <bombs> T: <temporary lifes> .....
@@ -108,7 +108,7 @@ def start():
         #Debug output
         if debug_output = 1:
                     print 'BOMBS: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+bombs)))
-                    print 'Temporart Life: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+templife)))
+                    print 'T Life: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+templife)))
                     print 'Keys: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+keys)))
                     print 'Gold: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+gold)))
                     print 'Energy: ' + str(wczytajwartosc(BASEADRESS,(OFF0,OFF1,OFF2,OFF3,OFF4,OFF5+energy)))
